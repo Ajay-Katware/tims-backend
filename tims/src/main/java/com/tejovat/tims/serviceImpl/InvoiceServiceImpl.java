@@ -47,12 +47,8 @@ public class InvoiceServiceImpl implements InvoiceService{
 
 	@Override
 	public Invoice get(Integer id) {
-		Optional<Invoice> item = repo.findById(id);
-		if(item.isPresent()) {
-			return item.get();
-		}else {
-			return null;
-		}
+		Invoice item = repo.findOne(id);
+		return item;
 	}
 
 	@Override

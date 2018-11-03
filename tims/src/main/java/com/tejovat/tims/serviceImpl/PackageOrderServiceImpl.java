@@ -46,12 +46,7 @@ public class PackageOrderServiceImpl implements PackageOrderService{
 
 	@Override
 	public PackageOrder get(Integer id) {
-		Optional<PackageOrder> order = repo.findById(id);
-		if(order!=null) {
-			return order.get();
-		}else {
-			return null;
-		}
+		return repo.findOne(id);
 	}
 
 	@Override

@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.io.source.ByteArrayOutputStream;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -101,6 +100,7 @@ public class SalesOrderPdf{
 		cell1.setBackgroundColor(Color.LIGHT_GRAY);
 		table.addCell(cell1);
 		doc.add(table);
+		
 		doc.add(new Paragraph( ""));
 		doc.add(createCustomerTable(salesOrder));
 		doc.add(new Paragraph(""));

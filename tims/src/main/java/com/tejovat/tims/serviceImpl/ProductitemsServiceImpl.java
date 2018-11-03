@@ -42,16 +42,13 @@ public class ProductitemsServiceImpl implements ProductitemService{
 
 	@Override
 	public ProductItem getProductItemDetails(Integer id) {
-		Optional<ProductItem> productitem = repo.findById(id);
-		if(productitem.isPresent()) {
-			return productitem.get();
-		}
-		return null;
+		ProductItem productitem = repo.findOne(id);
+		return productitem;
 	}
 
 	@Override
 	public void updateExcelsheet(List<ProductItem> items) {
-		repo.saveAll(items);
+		//repo.saveAll(items);
 	}
 
 	@Override

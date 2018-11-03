@@ -14,7 +14,7 @@ public interface RoleService {
 
 	public void deleteRole(Integer role);
 
-	public Optional<Role> getRole(Integer roleId);
+	public Role getRole(Integer roleId);
 	
 	public Role getRoleByName(String name);
 }

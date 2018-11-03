@@ -22,12 +22,8 @@ public class CustomerServiceImpl implements CustomerService{
 
 	@Override
 	public CustomerMaster getCustomerDetails(Integer id) {
-		Optional<CustomerMaster> customerMaster = customerRepo.findById(id);
-		if(customerMaster.isPresent()) {
-			return customerMaster.get();
-		}else {
-			return null;
-		}
+		CustomerMaster customerMaster = customerRepo.findOne(id);
+		return customerMaster;
 	}
 
 	@Override

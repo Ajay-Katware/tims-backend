@@ -33,12 +33,7 @@ public class SalesItemServiceImpl implements SalesItemsService{
 	
 	@Override
 	public SalesItem getSalesItemDetails(Integer id) {
-		Optional<SalesItem> opt = repo.findById(id);
-		if(opt.isPresent()) {
-			return opt.get();
-		}else {
-			return null;
-		}
+		return repo.findOne(id);
 	}
 
 	@Override

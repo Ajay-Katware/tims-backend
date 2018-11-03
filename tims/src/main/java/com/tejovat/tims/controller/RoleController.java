@@ -1,7 +1,5 @@
 package com.tejovat.tims.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +38,8 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public Optional<Role> getUserByUserId(@PathVariable("id") Integer id) throws Exception {
-		Optional<Role> role = roleService.getRole(id);
+	public Role getUserByUserId(@PathVariable("id") Integer id) throws Exception {
+		Role role = roleService.getRole(id);
 		return role;
 	}
 	

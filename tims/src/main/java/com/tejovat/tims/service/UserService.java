@@ -12,6 +12,7 @@ public interface UserService {
 	public User getUser(Integer id);
 	public User loginUser(String username, String password);
 	public User findUserByUseremail(String userEmail);
+	public User findUserByResetToken(String resetToken);
 	public Boolean findByUsername(String username);
 	public Integer getCount();
 	public User storeFile(Integer id, MultipartFile file);

@@ -32,11 +32,7 @@ public class ProductServiceImpl implements ProductmasterService{
 	
 	@Override
 	public ProductMaster getProductDetails(Integer id) {
-		Optional<ProductMaster> productMaster = repo.findById(id);
-		if(productMaster.isPresent()) {
-			return productMaster.get();
-		}
-		return null;
+		return repo.findOne(id);
 	}
 
 	@Override

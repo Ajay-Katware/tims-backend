@@ -32,15 +32,15 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public void deleteRole(Integer roleId) {
-		Optional<Role> role = getRole(roleId);
-		if(role.isPresent()) {
-			repo.deleteById(roleId);
+		Role role = getRole(roleId);
+		if(role!=null) {
+			repo.delete(role);
 		}
 	}
 
 	@Override
-	public Optional<Role> getRole(Integer roleId) {
-		return repo.findById(roleId);
+	public Role getRole(Integer roleId) {
+		return repo.findOne(roleId);
 	}
 
 	@Override

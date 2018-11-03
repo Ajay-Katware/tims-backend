@@ -34,11 +34,7 @@ public class SalesOrderServiceImpl implements SalesOrderService{
 
 	@Override
 	public SalesOrder getSalesOrderDetails(Integer id) {
-		Optional<SalesOrder> optional = repo.findById(id);
-		if(optional.isPresent()) {
-			return optional.get();
-		}
-		return null;
+		return repo.findOne(id);
 	}
 
 	@Override

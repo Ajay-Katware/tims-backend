@@ -46,12 +46,8 @@ public class PackageItemServiceImpl implements PackageItemService{
 
 	@Override
 	public PackageItem get(Integer id) {
-		Optional<PackageItem> item = repo.findById(id);
-		if(item.isPresent()) {
-			return item.get();
-		}else {
-			return null;
-		}
+		PackageItem item = repo.findOne(id);
+	return item;
 	}
 
 	@Override

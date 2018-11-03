@@ -1,5 +1,7 @@
 package com.tejovat.tims.controller;
 
+import java.io.FileNotFoundException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +134,20 @@ public class UserController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFilename() + "\"")
                 .body(new ByteArrayResource(dbFile.getPicture()));
     }
+    
+	@RequestMapping(value = "/checkUserByToken", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+	public ResponseEntity<User> getUserByUserResetToken(@RequestParam("resetToken") String resetToken) {
+		User user = userService.findUserByResetToken(resetToken);
+		return ResponseEntity.ok().body(user);
+	}
+	
+	@RequestMapping(value = "/setpassword", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
+	public ResponseEntity<User> updateUserPassword(@RequestBody User user, HttpServletRequest request) throws FileNotFoundException {
+		User user2 =  userService.getUser(user.getId());
+		user2.setUserpwd(user.getUserpwd());
+		user2.setResettoken("-");
+		User updatedUser = userService.saveUser(user2);
+		return ResponseEntity.ok().body(updatedUser);
+	}
 }
 

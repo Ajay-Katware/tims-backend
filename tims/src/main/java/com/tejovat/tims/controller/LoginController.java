@@ -65,7 +65,7 @@ public class LoginController {
 		if (user!=null) {
 			user.setResettoken(UUID.randomUUID().toString());
 			userService.updateUser(user);
-			String appUrl = "http://localhost:4200/forgot?resetToken="+user.getResettoken();
+			String appUrl = "http://localhost:4200/admin/setpassword;resetToken="+user.getResettoken();
 			String emailContaint = emailAssembler.forgotEmail(user.getFirstname(), appUrl);
 			try {
 				emailService.sendEmailHtml(emailContaint, user.getUseremail(), "Password Reset Request");

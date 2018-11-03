@@ -30,7 +30,6 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
-	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<CustomerMaster> createCustomerMaster(@RequestBody CustomerMaster customerMaster, HttpServletRequest request) throws Exception {
 		CustomerMaster createdCustomerMaster = customerService.saveCustomer(customerMaster);
 		return ResponseEntity.ok().body(createdCustomerMaster);
@@ -42,7 +41,6 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteCustomer(@PathVariable("id") Integer id) throws Exception {
 		customerService.deleteCustomer(id);
 	}
