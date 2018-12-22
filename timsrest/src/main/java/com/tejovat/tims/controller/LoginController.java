@@ -44,7 +44,7 @@ public class LoginController {
 	}
 
 
-	@RequestMapping(value="/update/{id}",method=RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
+	@RequestMapping(value="/update/{id}",method=RequestMethod.GET, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
 	public Map<String, String> updatePassword(@PathVariable("id") Integer id, @RequestParam String password) throws Exception {
 		User user = userService.getUser(id);
 		if(user!=null) {
