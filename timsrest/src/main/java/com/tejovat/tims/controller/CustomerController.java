@@ -1,5 +1,8 @@
 package com.tejovat.tims.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tejovat.tims.model.CustomerMaster;
+import com.tejovat.tims.model.Customers;
 import com.tejovat.tims.service.CustomerService;
 
 @RestController
@@ -28,6 +32,17 @@ public class CustomerController {
 	public @ResponseBody Iterable<CustomerMaster> getAllCustomerMasters() throws Exception{
 		return customerService.getAllCustomers();
 	}
+	
+	 @RequestMapping(value = "/all", method = RequestMethod.GET)
+	    public ResponseEntity<List<Customers>> getAllEmployees() {
+
+	        Iterable<Customers> employees = customerService.getCustomers();
+
+	        List<Customers> target = new ArrayList<>();
+	        employees.forEach(target::add);
+	        return new ResponseEntity<>(target, HttpStatus.OK);
+
+	    }
 	
 	@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
 	public ResponseEntity<CustomerMaster> createCustomerMaster(@RequestBody CustomerMaster customerMaster, HttpServletRequest request) throws Exception {

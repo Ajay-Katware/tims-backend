@@ -1,6 +1,9 @@
 package com.tejovat.tims.service;
 
+import java.util.List;
+
 import com.tejovat.tims.model.CustomerMaster;
+import com.tejovat.tims.model.Customers;
 
 public interface CustomerService {
 	
@@ -10,5 +13,7 @@ public interface CustomerService {
 	public CustomerMaster updateCustomer(CustomerMaster customerMaster);
 	public void deleteCustomer(Integer id);
 	public Integer getCount();
+	
+	List<Customers> getCustomers();
 
 }

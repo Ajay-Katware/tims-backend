@@ -9,49 +9,49 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tejovat.tims.exception.TIMSException;
 import com.tejovat.tims.exception.FileStorageException;
-import com.tejovat.tims.model.User;
+import com.tejovat.tims.model.MyUser;
 import com.tejovat.tims.repository.UserRepository;
-import com.tejovat.tims.service.UserService;
+import com.tejovat.tims.service.MyUserService;
 
 
 @Service
-public class UserServiceImpl implements UserService{
+public class MyUserServiceImpl implements MyUserService{
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
-	public Iterable<User> getUsers() {
-		Iterable<User> user = userRepository.findAll();
+	public Iterable<MyUser> getUsers() {
+		Iterable<MyUser> user = userRepository.findAll();
 		return user;
 	}
 
 	@Override
-	public User saveUser(User user) {
+	public MyUser saveUser(MyUser user) {
 		return userRepository.save(user);
 	}
 
 	@Override
-	public User updateUser(User user) {
+	public MyUser updateUser(MyUser user) {
 		return userRepository.save(user);
 	}
 
 	@Override
 	public void deleteUser(Integer id) {
-		User user  = getUser(id);
+		MyUser user  = getUser(id);
 		if(user!=null) {
 			userRepository.delete(user);
 		}
 	}
 
 	@Override
-	public User getUser(Integer id) {
+	public MyUser getUser(Integer id) {
 		return userRepository.findOne(id);
 	}
 
 	@Override
-	public User loginUser(String username, String password) {
-		User user = userRepository.findByUsername(username);
+	public MyUser loginUser(String username, String password) {
+		MyUser user = userRepository.findByUsername(username);
 		if(user == null) {
 			throw new TIMSException("Couldn't find your tejovat account.");
 		}else {
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User findUserByUseremail(String userEmail) {
-		User user = userRepository.findByUseremail(userEmail);
+	public MyUser findUserByUseremail(String userEmail) {
+		MyUser user = userRepository.findByUseremail(userEmail);
 		if(user == null) {
 			throw new TIMSException("Couldn't find your tejovat account.");
 		}
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public Boolean findByUsername(String username) {
-		User user = userRepository.findByUsername(username);
+		MyUser user = userRepository.findByUsername(username);
 		if(user == null) {
 			throw new TIMSException("Couldn't find your tejovat account");
 		}else {
@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User storeFile(Integer id, MultipartFile file) {
-		User user = getUser(id);
+	public MyUser storeFile(Integer id, MultipartFile file) {
+		MyUser user = getUser(id);
 		if(file!=null) {
 			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 			try {
@@ -109,13 +109,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getFile(Integer fileId) {
+	public MyUser getFile(Integer fileId) {
 		return userRepository.findOne(fileId);
 	}
 
 	@Override
-	public User findUserByResetToken(String resetToken) {
-		User user = userRepository.findByResettoken(resetToken);
+	public MyUser findUserByResetToken(String resetToken) {
+		MyUser user = userRepository.findByResettoken(resetToken);
 		if(user == null) {
 			throw new TIMSException("Oops!  This is an invalid password reset link.");
 		}else {

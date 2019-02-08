@@ -1,9 +1,5 @@
 package com.tejovat.tims.controller;
-
-import java.util.Collections;
-import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,54 +13,60 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tejovat.tims.assembler.EmailAssembler;
-import com.tejovat.tims.model.User;
+import com.tejovat.tims.model.MyUser;
 import com.tejovat.tims.service.EmailService;
-import com.tejovat.tims.service.UserService;
+import com.tejovat.tims.service.MyUserService;
 
 @RestController
 public class LoginController {
 
 	@Autowired
-	private UserService userService;
+	private MyUserService userService;
 
 	@Autowired
 	private EmailService emailService;
-	
-	@Autowired
-	private EmailAssembler emailAssembler;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<User> createHotel(@RequestBody User user) {
+	public ResponseEntity<MyUser> createHotel(@RequestBody MyUser user) {
 		String username = user.getUsername();
 		String password = user.getUserpwd();
-		User user2 = userService.loginUser(username, password);
+		MyUser user2 = userService.loginUser(username, password);
 		return ResponseEntity.ok().body(user2);
 	}
 
 
 	@RequestMapping(value="/update/{id}",method=RequestMethod.GET, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
-	public Map<String, String> updatePassword(@PathVariable("id") Integer id, @RequestParam String password) throws Exception {
-		User user = userService.getUser(id);
-		if(user!=null) {
+	public ResponseEntity<MyUser> updatePassword(@PathVariable("id") Integer id, @RequestParam("password") String password) throws Exception {
+		MyUser user = userService.getUser(id);
+		if(user != null) {
 			user.setUserpwd(password);
 			userService.updateUser(user);
-			return Collections.singletonMap("success", "Password updated successfully");
+			return ResponseEntity.ok().body(user);
+		}else {
+			return ResponseEntity.ok().body(null);
 		}
-		return Collections.singletonMap("fail", "Somthing is wrong");
 	}
 
 	@RequestMapping(value = "/forgot", method = RequestMethod.GET, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"} )
-	public ResponseEntity<User> processForgotPasswordForm(@RequestParam("userEmail") String userEmail, HttpServletRequest request) throws Exception {
-		User user = userService.findUserByUseremail(userEmail);
+	public ResponseEntity<MyUser> processForgotPasswordForm(@RequestParam("userEmail") String userEmail, HttpServletRequest request) throws Exception {
+		MyUser user = userService.findUserByUseremail(userEmail);
 		if (user!=null) {
 			user.setResettoken(UUID.randomUUID().toString());
 			userService.updateUser(user);
-			String appUrl = "http://localhost:4200/admin/setpassword;resetToken="+user.getResettoken();
-			String emailContaint = emailAssembler.forgotEmail(user.getFirstname(), appUrl);
+			String appUrl = "http://13.233.124.20:7001/admin/setpassword;resetToken="+user.getResettoken();
+			String emailContaint = "<html><body>"
+					+ "<h3>Hi"+user.getFirstname()+",</h3>"
+					+ "<br/>"
+					+ "To reset your password, click the link below: <br/>"
+					+ "<a href='"+appUrl+"'>"+appUrl+"</a>"
+					+ "<br/><br/>"
+					+ "Thanks,<br/>"
+					+ "Rigelix Team"
+					+ "</body></html>";
 			try {
 				emailService.sendEmailHtml(emailContaint, user.getUseremail(), "Password Reset Request");
+				System.out.println("--------------MAIL SENT To--------------"+userEmail);
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -76,7 +78,7 @@ public class LoginController {
 	
 	@RequestMapping(value="/reset/{id}",method=RequestMethod.GET, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"} )
 	public Boolean setNewPassword(@PathVariable("id") Integer id, @RequestParam String password) throws Exception {
-		User user = userService.getUser(id);
+		MyUser user = userService.getUser(id);
 		if(user!=null) {
 			user.setUserpwd(password);
 			user.setResettoken(null);

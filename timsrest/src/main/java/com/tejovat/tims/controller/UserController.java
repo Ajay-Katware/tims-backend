@@ -26,9 +26,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tejovat.tims.assembler.EmailAssembler;
 import com.tejovat.tims.dto.UploadFileResponse;
-import com.tejovat.tims.model.User;
+import com.tejovat.tims.model.MyUser;
 import com.tejovat.tims.service.EmailService;
-import com.tejovat.tims.service.UserService;
+import com.tejovat.tims.service.MyUserService;
 import com.tejovat.tims.util.PasswordUtils;
 
 @RestController
@@ -36,7 +36,7 @@ import com.tejovat.tims.util.PasswordUtils;
 public class UserController {
 
 	@Autowired
-	private UserService userService;
+	private MyUserService userService;
 
 	@Autowired
 	private EmailService emailService;
@@ -47,24 +47,24 @@ public class UserController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Iterable<User> getAllUsers() {
+	public @ResponseBody Iterable<MyUser> getAllUsers() {
 		return userService.getUsers();
 	}
 
 	//User Registration
 	@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<User> createUser(@RequestBody User user, HttpServletRequest request) {
+	public ResponseEntity<MyUser> createUser(@RequestBody MyUser user, HttpServletRequest request) {
 		if(user.getId()!=null && user.getId()>0) {
-			User user2 =  userService.getUser(user.getId());
+			MyUser user2 =  userService.getUser(user.getId());
 			user.setUserpwd(user2.getUserpwd());
-			User newuser = userService.saveUser(user);
+			MyUser newuser = userService.saveUser(user);
 			return ResponseEntity.ok().body(newuser);
 		}else {
 			@SuppressWarnings("static-access")
 			String password = new PasswordUtils().generateRandomPassword();
 			user.setUserpwd(password);
-			User newuser = userService.saveUser(user);
+			MyUser newuser = userService.saveUser(user);
 			String appUrl = request.getScheme() + "://" + request.getServerName()+":"+request.getServerPort()+"/tims/";
 			String emailContaint = emailAssembler.registerEmail(newuser.getFirstname(),newuser.getUsername(),newuser.getUserpwd(),appUrl);
 			try {
@@ -78,7 +78,7 @@ public class UserController {
 
 	@PostMapping("/uploadImage/{id}")
 	public UploadFileResponse uploadFile(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
-		User user = userService.storeFile(id, file);
+		MyUser user = userService.storeFile(id, file);
 
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 				.path("/users/downloadFile/")
@@ -90,14 +90,14 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public ResponseEntity<User> getUserByUserId(@PathVariable("id") Integer id) {
-		User user = userService.getUser(id);
+	public ResponseEntity<MyUser> getUserByUserId(@PathVariable("id") Integer id) {
+		MyUser user = userService.getUser(id);
 		return ResponseEntity.ok().body(user);
 	}
 
 	@RequestMapping(value = "/checkUserByEmail", method = RequestMethod.GET,consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
 	public ResponseEntity<Boolean> checkUseremail(@RequestParam("userEmail") String userEmail) {
-		User user = userService.findUserByUseremail(userEmail);
+		MyUser user = userService.findUserByUseremail(userEmail);
 		if(user!=null) {
 			return ResponseEntity.ok().body(true);
 		}
@@ -126,7 +126,7 @@ public class UserController {
     @GetMapping("/downloadFile/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("id") Integer id) {
         // Load file from database
-    	User dbFile = userService.getFile(id);
+    	MyUser dbFile = userService.getFile(id);
     	System.out.println("\n\n\n\n"+dbFile.toString()+"\nn\n\n");
 
         return ResponseEntity.ok()
@@ -136,17 +136,17 @@ public class UserController {
     }
     
 	@RequestMapping(value = "/checkUserByToken", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-	public ResponseEntity<User> getUserByUserResetToken(@RequestParam("resetToken") String resetToken) {
-		User user = userService.findUserByResetToken(resetToken);
+	public ResponseEntity<MyUser> getUserByUserResetToken(@RequestParam("resetToken") String resetToken) {
+		MyUser user = userService.findUserByResetToken(resetToken);
 		return ResponseEntity.ok().body(user);
 	}
 	
 	@RequestMapping(value = "/setpassword", method = RequestMethod.POST, consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
-	public ResponseEntity<User> updateUserPassword(@RequestBody User user, HttpServletRequest request) throws FileNotFoundException {
-		User user2 =  userService.getUser(user.getId());
+	public ResponseEntity<MyUser> updateUserPassword(@RequestBody MyUser user, HttpServletRequest request) throws FileNotFoundException {
+		MyUser user2 =  userService.getUser(user.getId());
 		user2.setUserpwd(user.getUserpwd());
 		user2.setResettoken("-");
-		User updatedUser = userService.saveUser(user2);
+		MyUser updatedUser = userService.saveUser(user2);
 		return ResponseEntity.ok().body(updatedUser);
 	}
 }

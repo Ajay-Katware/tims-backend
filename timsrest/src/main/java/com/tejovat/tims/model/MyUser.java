@@ -17,8 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="user")
-public class User implements java.io.Serializable {
+@Table(name="myuser")
+public class MyUser implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -48,15 +48,15 @@ public class User implements java.io.Serializable {
     private String country;
     private String gender;
 
-	public User() {
+	public MyUser() {
 	
 	}
 
-	public User(Integer id) {
+	public MyUser(Integer id) {
 		this.id = id;
 	}
 
-	public User(Integer id, String firstname, String lastname, String useremail, Integer userage, String userpwd,
+	public MyUser(Integer id, String firstname, String lastname, String useremail, Integer userage, String userpwd,
 			Byte userenabled, String confirmationtoken, String resettoken, Date createdon, Date lastlogin,
 			String contactno, String filename, String filetype, byte[] picture, Role userrole, Short tempactive,
 			String username, String streetno, String streetname, String city, String postalcode, String province,

@@ -11,14 +11,14 @@ import com.tejovat.tims.service.CustomerService;
 import com.tejovat.tims.service.PackageOrderService;
 import com.tejovat.tims.service.ProductitemService;
 import com.tejovat.tims.service.SalesOrderService;
-import com.tejovat.tims.service.UserService;
+import com.tejovat.tims.service.MyUserService;
 
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
 	
 	@Autowired
-	private UserService userService;
+	private MyUserService userService;
 	
 	@Autowired
 	private CustomerService customerService;
